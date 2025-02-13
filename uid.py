@@ -61,5 +61,5 @@ def get_groups():
         return "Error fetching user information. Please check your Facebook access token."
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
