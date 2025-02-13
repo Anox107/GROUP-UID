@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Groups</title>
+</head>
+<body>
+    <h1>User Information</h1>
+    <img src="{{ user_picture }}" alt="User Picture" width="100"><br>
+    <h3>Name: {{ user_name }}</h3>
+    <h3>User ID: {{ user_id }}</h3>
+
+    <h2>Your Facebook Groups</h2>
+    <ul>
+        {% for group in groups %}
+            <li>
+                <strong>Group Name:</strong> {{ group.name }} <br>
+                <strong>Group ID:</strong> {{ group.id }} <br><br>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
