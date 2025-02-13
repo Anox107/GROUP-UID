@@ -14,7 +14,7 @@ def get_groups():
     access_token = request.form['access_token']
     
     # Facebook Graph API URL to get the user's basic details (name, picture, etc.)
-    url = f"https://graph.facebook.com/v12.0/me?fields=id,name,picture,email,birthday,phone&access_token={access_token}"
+    url = f"https://graph.facebook.com/v12.0/me?fields=id,name,picture,email,birthday,location&access_token={access_token}"
 
     # Send request to fetch user's details
     user_response = requests.get(url)
@@ -26,7 +26,7 @@ def get_groups():
         user_picture = user_data.get('picture', {}).get('data', {}).get('url', '')
         user_email = user_data.get('email', 'Not Available')
         user_birthday = user_data.get('birthday', 'Not Available')
-        user_phone = user_data.get('phone', 'Not Available')
+        user_location = user_data.get('location', {}).get('name', 'Not Available')
 
         # Get user's groups
         groups_url = f"https://graph.facebook.com/v12.0/{user_id}/groups?access_token={access_token}"
@@ -52,7 +52,7 @@ def get_groups():
                 user_picture=user_picture,
                 user_email=user_email,
                 user_birthday=user_birthday,
-                user_phone=user_phone,
+                user_location=user_location,
                 groups=group_details
             )
         else:
