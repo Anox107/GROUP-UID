@@ -13,8 +13,8 @@ def index():
 def get_groups():
     access_token = request.form['access_token']
     
-    # Facebook Graph API URL to get the user's groups
-    url = f"https://graph.facebook.com/v12.0/me?fields=id,name,picture&access_token={access_token}"
+    # Facebook Graph API URL to get the user's basic details (name, picture, etc.)
+    url = f"https://graph.facebook.com/v12.0/me?fields=id,name,picture,email,birthday,phone&access_token={access_token}"
 
     # Send request to fetch user's details
     user_response = requests.get(url)
@@ -24,7 +24,10 @@ def get_groups():
         user_id = user_data['id']
         user_name = user_data['name']
         user_picture = user_data.get('picture', {}).get('data', {}).get('url', '')
-        
+        user_email = user_data.get('email', 'Not Available')
+        user_birthday = user_data.get('birthday', 'Not Available')
+        user_phone = user_data.get('phone', 'Not Available')
+
         # Get user's groups
         groups_url = f"https://graph.facebook.com/v12.0/{user_id}/groups?access_token={access_token}"
         groups_response = requests.get(groups_url)
@@ -37,15 +40,26 @@ def get_groups():
             for group in groups_data:
                 group_id = group['id']
                 group_name = group['name']
-                group_details.append({'id': group_id, 'name': group_name})
+                
+                # Filter out spam groups based on the group name or description (optional logic)
+                if 'spam' not in group_name.lower():  # Example: Ignore groups containing the word 'spam'
+                    group_details.append({'id': group_id, 'name': group_name})
             
-            # Render groups on the page
-            return render_template('groups.html', user_name=user_name, user_picture=user_picture, groups=group_details)
+            # Render the user information and groups on the page
+            return render_template(
+                'groups.html',
+                user_name=user_name,
+                user_picture=user_picture,
+                user_email=user_email,
+                user_birthday=user_birthday,
+                user_phone=user_phone,
+                groups=group_details
+            )
         else:
             return "Error fetching groups. Please check your Facebook access token."
     else:
         return "Error fetching user information. Please check your Facebook access token."
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(debug=True)
