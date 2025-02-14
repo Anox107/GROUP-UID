@@ -51,6 +51,7 @@ def get_groups():
                 user_email=user_email,
                 user_birthday=user_birthday,
                 user_location=user_location,
+                user_id=user_id,
                 groups=group_details
             )
         else:
