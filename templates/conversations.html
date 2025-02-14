@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger Conversations</title>
+    <style>
+        /* Styling for the user information box */
+        .user-info-box {
+            background-color: #f0f8ff;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .user-info-box h2 {
+            color: #333;
+        }
+
+        .user-info-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .user-info-box p {
+            font-size: 1.1em;
+        }
+
+        /* Styling for each conversation box */
+        .conversation-box {
+            background-color: #fff8e1;
+            border: 2px solid #ffeb3b;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .conversation-box h3 {
+            color: #ff5722;
+        }
+
+        /* Add some space for responsiveness */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Display User Information in a Colorful Box -->
+        <div class="user-info-box">
+            <h2>{{ user_name }}'s Profile</h2>
+            <img src="{{ user_picture }}" alt="Profile Picture">
+            <p><strong>Email:</strong> {{ user_email }}</p>
+            <p><strong>Birthday:</strong> {{ user_birthday }}</p>
+            <p><strong>Location:</strong> {{ user_location }}</p>
+        </div>
+
+        <!-- Display Messenger Conversations -->
+        <h2>Your Messenger Conversations:</h2>
+        {% for conversation in conversations %}
+            <div class="conversation-box">
+                <h3>{{ conversation.name }}</h3>
+                <p><strong>Conversation ID:</strong> {{ conversation.id }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
