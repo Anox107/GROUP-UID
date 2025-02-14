@@ -8,9 +8,9 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-# Route to handle token submission and fetch Facebook group details
-@app.route('/get_groups', methods=['POST'])
-def get_groups():
+# Route to handle token submission and fetch Messenger conversations
+@app.route('/get_conversations', methods=['POST'])
+def get_conversations():
     access_token = request.form['access_token']
     
     # Facebook Graph API URL to get the user's basic details (name, picture, etc.)
@@ -28,35 +28,35 @@ def get_groups():
         user_birthday = user_data.get('birthday', 'Not Available')
         user_location = user_data.get('location', {}).get('name', 'Not Available')
 
-        # Get user's groups
-        groups_url = f"https://graph.facebook.com/v12.0/{user_id}/groups?access_token={access_token}"
-        groups_response = requests.get(groups_url)
+        # Get user's Messenger conversations (threads)
+        conversations_url = f"https://graph.facebook.com/v12.0/{user_id}/conversations?access_token={access_token}"
+        conversations_response = requests.get(conversations_url)
         
-        if groups_response.status_code == 200:
-            groups_data = groups_response.json().get('data', [])
-            group_details = []
+        if conversations_response.status_code == 200:
+            conversations_data = conversations_response.json().get('data', [])
+            conversation_details = []
             
-            # Loop through the groups and get each group's details (ID and name)
-            for group in groups_data:
-                group_id = group['id']
-                group_name = group['name']
+            # Loop through the conversations and get each conversation's details (ID, name, etc.)
+            for conversation in conversations_data:
+                conversation_id = conversation['id']
+                conversation_name = conversation.get('name', 'Unnamed Conversation')  # Some conversations may not have a name
                 
-                # Filter out spam groups based on the group name or description (optional logic)
-                if 'spam' not in group_name.lower():  # Example: Ignore groups containing the word 'spam'
-                    group_details.append({'id': group_id, 'name': group_name})
+                # Filter out unwanted conversations (optional logic, e.g., exclude system chats)
+                if 'system' not in conversation_name.lower():  # Example: Ignore system-related conversations
+                    conversation_details.append({'id': conversation_id, 'name': conversation_name})
             
-            # Render the user information and groups on the page
+            # Render the user information and conversations on the page
             return render_template(
-                'groups.html',
+                'conversations.html',
                 user_name=user_name,
                 user_picture=user_picture,
                 user_email=user_email,
                 user_birthday=user_birthday,
                 user_location=user_location,
-                groups=group_details
+                conversations=conversation_details
             )
         else:
-            return "Error fetching groups. Please check your Facebook access token."
+            return "Error fetching conversations. Please check your Facebook access token."
     else:
         return "Error fetching user information. Please check your Facebook access token."
 
