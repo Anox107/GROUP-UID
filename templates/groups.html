@@ -3,83 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Facebook Groups</title>
+    <title>Facebook Messenger Groups</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+        /* Styling for the user information box */
+        .user-info-box {
+            background-color: #f0f8ff;
+            border: 2px solid #4caf50;
             padding: 20px;
-        }
-        h1 {
-            text-align: center;
             margin-bottom: 20px;
-        }
-        .user-info {
-            text-align: center;
-            background-color: white;
-            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
         }
-        .user-info img {
+
+        .user-info-box h2 {
+            color: #333;
+        }
+
+        .user-info-box img {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            width: 120px;
-            height: 120px;
         }
-        .user-info ul {
-            list-style-type: none;
-            padding: 0;
+
+        .user-info-box p {
+            font-size: 1.1em;
         }
-        .user-info ul li {
-            margin: 10px 0;
-            font-size: 18px;
-        }
+
+        /* Styling for each group box */
         .group-box {
-            display: inline-block;
-            width: 200px;
-            margin: 15px;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
+            background-color: #fff8e1;
+            border: 2px solid #ffeb3b;
+            padding: 15px;
+            margin-bottom: 15px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .group-box:hover {
+
+        .group-box h3 {
+            color: #ff5722;
+        }
+
+        /* Styling for the copy button */
+        .copy-btn {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .copy-btn:hover {
             background-color: #45a049;
-        }
-        .group-box p {
-            margin: 10px 0;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome, {{ user_name }}</h1>
-    
-    <div class="user-info">
-        <img src="{{ user_picture }}" alt="Profile Picture">
-        <h3>User Information:</h3>
-        <ul>
-            <li><strong>Email:</strong> {{ user_email }}</li>
-            <li><strong>Birthday:</strong> {{ user_birthday }}</li>
-            <li><strong>Location:</strong> {{ user_location }}</li>
-        </ul>
-    </div>
+    <div class="container">
+        <!-- Display User Information in a Colorful Box -->
+        <div class="user-info-box">
+            <h2>{{ user_name }}'s Profile</h2>
+            <img src="{{ user_picture }}" alt="Profile Picture">
+            <p><strong>Email:</strong> {{ user_email }}</p>
+            <p><strong>Birthday:</strong> {{ user_birthday }}</p>
+            <p><strong>Location:</strong> {{ user_location }}</p>
+        </div>
 
-    <h3>Your Groups:</h3>
-    {% if groups %}
-        <div style="text-align: center;">
+        <!-- Display Messenger Groups -->
+        <h2>Your Messenger Groups:</h2>
+        {% if groups %}
             {% for group in groups %}
                 <div class="group-box">
-                    <p><strong>Group ID:</strong> {{ group.id }}</p>
-                    <p><strong>Group Name:</strong> {{ group.name }}</p>
+                    <h3>{{ group.name }}</h3>
+                    <button class="copy-btn" onclick="copyGroupId('{{ group.id }}')">Copy</button>
                 </div>
             {% endfor %}
-        </div>
-    {% else %}
-        <p>No groups found or all groups are spam.</p>
-    {% endif %}
+        {% else %}
+            <p>No groups found or access token might be invalid.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Function to copy the group UID to clipboard
+        function copyGroupId(groupId) {
+            // Create a temporary input element to copy the group ID
+            var tempInput = document.createElement('input');
+            tempInput.value = groupId;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            // Alert the user that the UID has been copied
+            alert("Group UID copied to clipboard!");
+        }
+    </script>
 </body>
 </html>
