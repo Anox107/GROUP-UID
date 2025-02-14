@@ -57,6 +57,12 @@
         .copy-btn:hover {
             background-color: #45a049;
         }
+
+        /* Container styling */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +74,7 @@
             <p><strong>Email:</strong> {{ user_email }}</p>
             <p><strong>Birthday:</strong> {{ user_birthday }}</p>
             <p><strong>Location:</strong> {{ user_location }}</p>
+            <p><strong>User ID:</strong> {{ user_id }}</p>
         </div>
 
         <!-- Display Messenger Groups -->
@@ -76,7 +83,8 @@
             {% for group in groups %}
                 <div class="group-box">
                     <h3>{{ group.name }}</h3>
-                    <button class="copy-btn" onclick="copyGroupId('{{ group.id }}')">Copy</button>
+                    <button class="copy-btn" onclick="copyGroupId('{{ group.id }}')">Copy UID</button>
+                    <p>{{ group.id }}</p>
                 </div>
             {% endfor %}
         {% else %}
