@@ -28,20 +28,25 @@ def get_groups():
         user_birthday = user_data.get('birthday', 'Not Available')
         user_location = user_data.get('location', {}).get('name', 'Not Available')
 
-        # Get user's Messenger groups (conversations)
-        groups_url = f"https://graph.facebook.com/v12.0/{user_id}/conversations?access_token={access_token}"
+        # Get the user's active Messenger groups (conversations)
+        groups_url = f"https://graph.facebook.com/v12.0/{user_id}/conversations?access_token={access_token}&fields=id,name,picture"
         groups_response = requests.get(groups_url)
         
         if groups_response.status_code == 200:
             groups_data = groups_response.json().get('data', [])
             group_details = []
             
-            # Loop through the groups and get each group's details (ID and name)
+            # Loop through the groups and get each group's details (ID, name, and picture)
             for group in groups_data:
                 group_id = group['id']
                 group_name = group.get('name', 'Unnamed Group')  # Some groups may not have a name
-                
-                group_details.append({'id': group_id, 'name': group_name})
+                group_picture = group.get('picture', {}).get('data', {}).get('url', '')
+
+                group_details.append({
+                    'id': group_id,
+                    'name': group_name,
+                    'picture': group_picture
+                })
             
             # Render the user information and groups on the page
             return render_template(
