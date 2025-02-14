@@ -36,12 +36,19 @@
             margin-bottom: 15px;
             border-radius: 10px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
 
         .group-box h3 {
             color: #ff5722;
+        }
+
+        .group-box img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
         /* Styling for the copy button */
@@ -78,17 +85,20 @@
         </div>
 
         <!-- Display Messenger Groups -->
-        <h2>Your Messenger Groups:</h2>
+        <h2>Your Active Messenger Groups:</h2>
         {% if groups %}
             {% for group in groups %}
                 <div class="group-box">
-                    <h3>{{ group.name }}</h3>
+                    <img src="{{ group.picture }}" alt="Group Picture">
+                    <div>
+                        <h3>{{ group.name }}</h3>
+                        <p><strong>UID:</strong> {{ group.id }}</p>
+                    </div>
                     <button class="copy-btn" onclick="copyGroupId('{{ group.id }}')">Copy UID</button>
-                    <p>{{ group.id }}</p>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No groups found or access token might be invalid.</p>
+            <p>No active groups found or access token might be invalid.</p>
         {% endif %}
     </div>
 
